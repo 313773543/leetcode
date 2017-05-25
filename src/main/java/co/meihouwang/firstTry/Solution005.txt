@@ -1,0 +1,89 @@
+package co.meihouwang.firstTry;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+/**
+ * Created by wangbin7cmcm.com on 17/5/3.
+ */
+
+public class Solution005 {
+    public static void main(String[] args){
+        System.out.println("Solution 005");
+        String test = "ccc";
+        Solution005 solution005 = new Solution005();
+
+        String result = solution005.longestPalindrome(test);
+        System.out.println("Result of " + test + " is " + result);
+
+    }
+
+
+    public String longestPalindrome(String s){
+
+        int length = s.length();
+        List<String> listOfPalindrome = new ArrayList<String>();
+
+        if (s.length() == 2 && s.charAt(0) == s.charAt(1)){
+            return (String.valueOf(s.charAt(0))+String.valueOf(s.charAt(0)));
+        }
+
+        for (int i = 0 ; i < length; i++ ){
+            StringBuilder palindrome = new StringBuilder() ;
+
+            if( i+1 < s.length()  && s.charAt(i) == s.charAt(i+1) ){
+                if(! (i-1 >= 0 && s.charAt(i) == s.charAt(i-1))) {
+                    palindrome.append(s.charAt(i)).append(s.charAt(i));
+
+                    for (int j = i - 1; j > -1 && (i + i - j + 1) < length; j--) {
+                        if (s.charAt(j) == s.charAt(i - j + i + 1)) {
+                            palindrome.insert(0, s.charAt(j)).append(s.charAt(i - j + i + 1));
+                        }
+                    }
+                    listOfPalindrome.add(palindrome.toString());
+                }else {
+                    palindrome = new StringBuilder();
+                    palindrome.append(s.charAt(i));
+                    for (int j = i - 1; j > -1 && (i + i - j) < length; j--) {
+                        if (s.charAt(j) != s.charAt(i - j + i)) {
+                            break;
+                        } else {
+                            palindrome.insert(0, s.charAt(j)).append(s.charAt(i - j + i));
+                            listOfPalindrome.add(palindrome.toString());
+                        }
+                    }
+
+                }
+
+
+            }else {
+
+                palindrome = new StringBuilder();
+                palindrome.append(s.charAt(i));
+                for (int j = i - 1; j > -1 && (i + i - j) < length; j--) {
+                    if (s.charAt(j) != s.charAt(i - j + i)) {
+                        break;
+                    } else {
+                        palindrome.insert(0, s.charAt(j)).append(s.charAt(i - j + i));
+                        listOfPalindrome.add(palindrome.toString());
+                    }
+                }
+            }
+
+        }
+
+        Collections.sort(listOfPalindrome,new Comparator<String>(){
+            public int compare(String s1, String s2){
+                return s1.length() - s2.length();
+            }
+        });
+
+        if (listOfPalindrome.size() == 0 ){
+            return String.valueOf(s.charAt(0));
+        }
+
+        return listOfPalindrome.get(listOfPalindrome.size() - 1);
+    }
+}
